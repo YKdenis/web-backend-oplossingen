@@ -37,7 +37,7 @@ In 2013 maakte hij de overstap naar Louis Vuitton, om een jaar later zijn eigen 
 
 
 $artikelBestaatNiet = false;
-$IndividueelArtikel = false;
+$individueelArtikel = false;
 
 if(isset($_GET['id'])) {
     
