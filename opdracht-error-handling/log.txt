@@ -1,0 +1,8 @@
+[2015-10-25 06:22:26pm] 127.0.0.1 error Er werd met het formulier geknoeid PHP_EOL[2015-10-25 06:23:20pm] 127.0.0.1 error Er werd met het formulier geknoeid
+[2015-10-25 06:23:32pm] 127.0.0.1 error Er werd met het formulier geknoeid
+[2015-10-25 06:39:15pm] 127.0.0.1 error Er werd met het formulier geknoeid
+[2015-10-25 06:39:50pm] 127.0.0.1 error Er werd met het formulier geknoeid
+[2015-10-25 06:39:57pm] 127.0.0.1 error De kortingscode heeft niet de juiste lengte
+[2015-10-25 06:53:02pm] 127.0.0.1 error De kortingscode heeft niet de juiste lengte
+[2015-10-25 06:53:40pm] 127.0.0.1 error De kortingscode heeft niet de juiste lengte
+[2015-10-25 06:53:51pm] 127.0.0.1 error De kortingscode heeft niet de juiste lengte
