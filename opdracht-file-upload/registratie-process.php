@@ -16,23 +16,10 @@
         unset($_SESSION['registratie']['email']);
         $_SESSION['registratie']['email'] = $_POST['email'];
         
-        if( isset($_SESSION['registratie']['email']) )
-        {
-            $email = $_SESSION['registratie']['email'];
-        }
-        else
-        {
-          $email = $_POST['email'];  
-        }
         
-        if( isset($_SESSION['registratie']['password']) )
-        {
-            $password = $_SESSION['registratie']['password'];
-        }
-        else
-        {
-            $password = $_POST['password'];
-        }
+        $email = $_POST['email'];  
+        
+        $password = $_POST['password'];
         
         if(empty($email))
         {
@@ -48,8 +35,7 @@
         {
             
              try {
-                $db = new pdo('mysql:host=localhost;dbname=opdracht_security_login', 'root',
-                'cohiba'); 
+                $db = new PDO( 'mysql:host=localhost;dbname=opdracht_file_upload', 'root', 'cohiba' );
                 $messageContainer	=	'Verbonden met database.';
                 
                 $queryValidEmail = "select * from users where email = :email";
@@ -65,21 +51,22 @@
                 }
                 else
                 {
-                    $salt = uniqid(mt_rand(), true);
+                    $salt = substr(sha1(mt_rand()),0,22);
                     $hashed_password = hash( 'sha512', $salt . $password );
                     $hashed_email = hash( 'sha512', $salt . $email );
+                    $prof_pic = 'image/schattig-katje.jpg';
                     
-                    
-                    $queryInsert = "insert into users (email, salt, hashed_password, last_login_time) values(:email, :salt, :hashed_password, NOW())";
+                    $queryInsert = "insert into users (email, salt, password, date, profile_picture) values(:email, :salt, :hashed_password, NOW(), :profile_picture)";
                     $statementInsert = $db->prepare($queryInsert);
                     $statementInsert->bindValue(':email', $email);
                     $statementInsert->bindValue(':salt', $salt);
                     $statementInsert->bindValue(':hashed_password', $hashed_password);
+                    $statementInsert->bindValue(':profile_picture', $prof_pic);
                     $statementInsert->execute();
                     
                     
                     
-                    if( setcookie('login', $email . ',' . $hashed_email, time() + 2592000))
+                    if( setcookie('login', $email . ',' . $hashed_email . ',' . $prof_pic, time() + 2592000))
                     {
                         header( 'Location:dashboard.php' );
                     }

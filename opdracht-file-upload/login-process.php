@@ -11,7 +11,7 @@
     try 
     {
         
-        $db = new pdo('mysql:host=localhost;dbname=opdracht-file-upload', 'root',
+        $db = new pdo('mysql:host=localhost;dbname=opdracht_file_upload', 'root',
         'cohiba'); 
         $messageContainer	=	'Verbonden met database.';
 
