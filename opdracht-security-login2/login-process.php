@@ -31,20 +31,23 @@ if( isset($_POST["submit"]) )
     {
         $connection 	=	 new PDO( 'mysql:host=localhost;dbname=opdracht_security_login', 'root', 'cohiba' );
 
-        $db = new Database( $connection );
+        //$db = new Database( $connection );
         
-        $userData	=	$db->query( 'SELECT * 
-										FROM users 
-										WHERE email = :email', 
-									array(':email' => $email ) );
+        $query = 'SELECT * FROM users WHERE email = :email';
+ 
+        $preparedStatement = $connection->prepare($query);
+        $preparedStatement->bindValue(':email', $email, \PDO::PARAM_STR);
+        $result = $preparedStatement->execute();
+        $array = $preparedStatement->fetch(\PDO::FETCH_ASSOC);
+        // echo 'array ' .$email;
+        // echo $result;
+        // var_dump($array);
+        // return;
+        if ($array) {
+            // Controle of het paswoord correct is of niet
+            $salt = $array['salt'];
+            $passwordDb = $array['hashed_password'];
 
-			if( isset( $userData['data'][0] ) )
-			{
-				var_dump( $_POST );
-				var_dump( $userData['data'][0] );
-				# Controle of het paswoord correct is of niet
-				$salt 		= 	$userData['data'][0]['salt'];
-				$passwordDb = 	$userData['data'][0]['hashed_password'];
 
 				$newlyHashedPassword = hash( 'sha512', $salt . $password);
 

@@ -11,7 +11,7 @@
 
 			$db = new Database( $connection );
 
-			$query 	=	'INSERT INTO users 
+			$query 	=	'INSERT INTO users
 											(email,
 											salt,
 											hashed_password,
@@ -20,12 +20,18 @@
 											:salt,
 											:password,
 											NOW())';
-
-			$tokens	=	array( ':email' => $email,
-								':salt' => $salt,
-								':password' => $hashedPassword);
-
-			$userData	=	$db->query( $query , $tokens );
+ 
+			// $tokens	=	array( ':email' => $email,
+			// 					':salt' => $salt,
+			// 					':password' => $hashedPassword);
+ 
+			// $userData	=	$db->query( $query , $tokens );
+			$preparedStatement = $connection->prepare($query);
+ 
+			$preparedStatement->bindParam(':email', $email, \PDO::PARAM_STR);
+			$preparedStatement->bindParam(':salt', $salt, \PDO::PARAM_STR);
+			$preparedStatement->bindParam(':password', $hashedPassword, \PDO::PARAM_STR);
+			$preparedStatement->execute();
 
 			# TODO: Controle of user correct is toegevoegd
 			# dmv query op database die laatste row van users ophaalt
