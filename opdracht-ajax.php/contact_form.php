@@ -32,37 +32,7 @@ if( isset($_SESSION["kopie"]) )
     <meta charset="UTF-8">
     <title>Document</title>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>
-    $(document).ready(function()
-    {
-        
-        $('#submitFile').submit(function(){
-            console.log('test');
-            var formData = [$('#email').serialize(), $('#message').serialize()];
-            console.log('formData:' + formData);
-            
-            $.ajax(
-            {
-                type: 'POST',
-                url: 'contact_API.php',
-                data: formData,
-                success: function(data) 
-                {
-                    
-                    parsedData	=	JSON.parse(data);
-
-                    $('.placeholder').append('<p>' + parsedData['status'] + '<p>');
-
-                }
-
-				});
-            return false;
-        });
-        
-    });
-        
-    </script>
+    
     
 </head>
 <body>
@@ -73,7 +43,7 @@ if( isset($_SESSION["kopie"]) )
     <p><?php echo $message['text']?></p>
     <?php endif ?>
     
-    <form action="contact.php" method="post">
+    <form action="contact.php" method="post" id="contact_form">
         <ul>
             <li>
                 <label for="email">E-mailadres</label>
@@ -91,5 +61,35 @@ if( isset($_SESSION["kopie"]) )
         <input type="submit" name="submit" id="submitFile">
     </form>
     <div class="placeholder"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+    $(document).ready(function()
+    {
+        console.log('test');
+        $('#contact_form').submit(function(){
+            
+            var formData = [$('#email').serialize(), $('#message').serialize()];
+            console.log('formData:' + formData);
+            
+            $.ajax({
+                
+                type: 'POST',
+                url: 'contact_API.php',
+                data: formData,
+                success: function(data){
+                    
+                    var parsedData	=	JSON.parse(data);
+
+                    $('.placeholder').append('<p>' + parsedData['status'] + '<p>');
+
+                }
+
+				});
+            return false;
+        });
+        
+    });
+        
+    </script>
 </body>
 </html>

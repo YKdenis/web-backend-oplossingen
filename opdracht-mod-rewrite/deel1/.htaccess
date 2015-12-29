@@ -1,0 +1,5 @@
+RewriteEngine On
+
+DirectoryIndex original.php
+
+RewriteRule ^original.php$ redirect.php
