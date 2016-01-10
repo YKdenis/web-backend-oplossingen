@@ -76,7 +76,7 @@ if (isset($_POST['action'])) // postback de gebruiker heeft op een button elemen
 <body>
 <h1>Artikel toevoegen</h1>
 
-<a href="">Terug naar overzicht</a>
+<a href="artikel-overzicht.php">Terug naar overzicht</a>
 
 <form action="artikel-toevoegen.php" method="post">
     <div style="color: green">

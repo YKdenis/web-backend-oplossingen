@@ -12,7 +12,7 @@ class artikel_model
     private $artikel;
     private $kernwoorden;
     private $datum;
-
+    private $search;
     private $db;
     private $feedback;
 
@@ -30,6 +30,16 @@ class artikel_model
     public function setTitel($titel)
     {
         $this->titel = $titel;
+    }
+
+    public function getSearch()
+    {
+        return $this->search;
+    }
+
+    public function setSearch($search)
+    {
+        $this->search = $search;
     }
 
     /**
@@ -158,5 +168,82 @@ class artikel_model
         }
         $this->feedback->log();
         return $result;
+    }
+
+    public function searchContent()
+    {
+
+        $query = "select * from artikels where artikel LIKE CONCAT('%', :search, '%')";
+
+        $rows = null;
+        try {
+            $preparedStatement = $this->db->prepare($query);
+            // so we cannot use bindParam that requires a variable by value
+            // if you want to use a variable, use then bindParam
+            $preparedStatement->bindValue(':search', $this->getSearch(), \PDO::PARAM_STR);
+            $result = $preparedStatement->execute();
+            // als execute is uitgevoerd dan staat $result op true.
+            if ($result) {
+
+                $rows = $preparedStatement->fetchAll();
+                $this->feedback->setText("Alle artikels met zoekopdracht {$this->getSearch()}.");
+
+            } else {
+                // $preparedStatement->errorinfo() is een methode van sql dat standaard
+                // in php zit. Het is een array dat info bevat over mogelijke errors.
+                // indien er geen errors zijn is de array leeg en zal er dus ook niets in
+                // feedback komen te staan.
+                $sQLErrorInfo = $preparedStatement->errorInfo();
+                $this->feedback->setCode($sQLErrorInfo[0]);
+                $this->feedback->setCodeDriver($sQLErrorInfo[1]);
+                $this->feedback->setText($sQLErrorInfo[2]);
+            }
+            $this->feedback->setContext('Info van MySQL');
+
+        } catch (\PDOException $e) {
+            $this->feedback->setText($e->getMessage());
+            $this->feedback->setContext('Fout gemeld door PDO in PHP');
+        }
+        $this->feedback->log();
+
+
+        return $rows;
+    }
+
+    public function searchDatum()
+    {
+
+        $query = "select * from artikels where datum LIKE CONCAT('%', :search, '%')";;
+        $rows = null;
+        try {
+            $preparedStatement = $this->db->prepare($query);
+            // so we cannot use bindParam that requires a variable by value
+            // if you want to use a variable, use then bindParam
+            $preparedStatement->bindValue(':search', $this->getSearch(), \PDO::PARAM_STR);
+            $result = $preparedStatement->execute();
+            // als execute is uitgevoerd dan staat $result op true.
+            if ($result) {
+
+                $rows = $preparedStatement->fetchAll();
+                $this->feedback->setText("Alle artikels met zoekopdracht {$this->getSearch()}.");
+
+            } else {
+                // $preparedStatement->errorinfo() is een methode van sql dat standaard
+                // in php zit. Het is een array dat info bevat over mogelijke errors.
+                // indien er geen errors zijn is de array leeg en zal er dus ook niets in
+                // feedback komen te staan.
+                $sQLErrorInfo = $preparedStatement->errorInfo();
+                $this->feedback->setCode($sQLErrorInfo[0]);
+                $this->feedback->setCodeDriver($sQLErrorInfo[1]);
+                $this->feedback->setText($sQLErrorInfo[2]);
+            }
+            $this->feedback->setContext('Info van MySQL');
+
+        } catch (\PDOException $e) {
+            $this->feedback->setText($e->getMessage());
+            $this->feedback->setContext('Fout gemeld door PDO in PHP');
+        }
+        $this->feedback->log();
+        return $rows;
     }
 }
