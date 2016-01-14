@@ -1,4 +1,4 @@
-// resources/views/tasks.blade.php
+
 
 @extends('layouts.app')
 
@@ -11,7 +11,7 @@
     @include('common.errors')
 
             <!-- New Task Form -->
-    <form action="/task" method="POST" class="form-horizontal">
+    <form action="{{ url('task') }}" method="POST" class="form-horizontal">
         {{ csrf_field() }}
 
                 <!-- Task Name -->
@@ -55,30 +55,23 @@
                 <!-- Table Body -->
                 <tbody>
                 @foreach ($tasks as $task)
-                    <tr>
-                        <!-- Task Name -->
-                        <td class="table-text">
-                            <div>{{ $task->name }}</div>
-                        </td>
-
-                        <td>
                             <!-- TODO: Delete Button -->
-                    <tr>
-                        <!-- Task Name -->
-                        <td class="table-text">
-                            <div>{{ $task->name }}</div>
-                        </td>
+                <tr>
+                    <!-- Task Name -->
+                    <td class="table-text">
+                        <div>{{ $task->name }}</div>
+                    </td>
 
-                        <!-- Delete Button -->
-                        <td>
-                            <form action="/task/{{ $task->id }}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+                    <!-- Delete Button -->
+                    <td>
+                        <form action="{{ url('task/'.$task->id) }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
 
-                                <button>Delete Task</button>
-                            </form>
-                        </td>
-                    </tr>
+                            <button>Delete Task</button>
+                        </form>
+                    </td>
+                </tr>
                         </td>
                     </tr>
                 @endforeach
