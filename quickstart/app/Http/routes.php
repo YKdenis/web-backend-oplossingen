@@ -27,18 +27,19 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => ['web']], function () {
 
 
-    Route::get('/', function () {
+    // Protected route by using 'middleware' => 'auth'
+    Route::get('/todo', ['middleware' => 'auth', function () {
         $tasks = Task::orderBy('created_at', 'asc')->get();
 
         return view('tasks', [
             'tasks' => $tasks
         ]);
-    });
+    }]);
 
     /**
      * Add A New Task
      */
-    Route::post('/task', function (Request $request) {
+    Route::post('/todo/task', ['middleware' => 'auth', function (Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
         ]);
@@ -51,18 +52,37 @@ Route::group(['middleware' => ['web']], function () {
 
         $task = new Task;
         $task->name = $request->name;
+        $task->status = true;
         $task->save();
 
-        return redirect('/');
-    });
+        return redirect('/todo');
+    }]);
 
     /**
      * Delete An Existing Task
      */
 
-    Route::delete('/task/{task}', function (Task $task) {
+    Route::delete('/todo/task/delete/{task}', ['middleware' => 'auth', function (Task $task) {
         $task->delete();
 
-        return redirect('/');
-    });
+        return redirect('/todo');
+    }]);
+
+    /**
+     * Change the status of a task
+     */
+
+    Route::put('/todo/task/changeStatus/{task}', ['middleware' => 'auth', function (Task $task) {
+        $task->status = !$task->status;
+        $task->save();
+
+        return redirect('/todo');
+    }]);
+});
+
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+    Route::get('/home', 'HomeController@index');
+    Route::get('/', 'HomeController@index');
 });
